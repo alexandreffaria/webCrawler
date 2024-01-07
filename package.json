@@ -13,5 +13,8 @@
     "project"
   ],
   "author": "@alexandreffaria",
-  "license": "ISC"
+  "license": "ISC",
+  "devDependencies": {
+    "jest": "^29.7.0"
+  }
 }
