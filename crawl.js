@@ -52,24 +52,29 @@ async function crawlPage(currentLink){
 
     try {
         const response = await fetch(currentLink)
+        if (response.status > 399){
+            console.log(`Error above 400: ${response.status}`)
+            return
+        }
+        const contentType = response.headers.get('Content-Type')
+        if (!contentType.includes("text/html")) {
+            console.log(`Does this look like html to you? ${contentType}`)
+            return
+        }
+
+        const siteBody = await response.text()
+        console.log(siteBody)
     } catch (error) {
-        
+        console.log(error.message)
     }
+
+    
+}
+
     
 
-    if (response.status > 400){
-        console.log(`Error above 400: ${response.status}`)
-        return
-    } else if (response.headers.get('Content-Type').toLowerCase() !== 'text/html; charset=utf-8') {
-        console.log(`Does this look like html to you? ${response.headers.get('Content-Type')}`)
-        return
-    }
-
-    const siteBody = await response.text()
-    console.log(siteBody)
 
 
-}
 
 
 module.exports = {
