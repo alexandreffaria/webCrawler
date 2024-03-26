@@ -15,10 +15,9 @@ function main(){
     }
 
     const baseUrl = argv[2];
-    crawlPage(baseUrl);
-
+    pages = crawlPage(baseUrl, baseUrl, {});
+    console.log(pages)
 
 }
-
 
 main()

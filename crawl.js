@@ -1,78 +1,88 @@
-const jsdom = require("jsdom"); 
-const {JSDOM} = jsdom
+const { JSDOM } = require('jsdom')
 
-function normalizeURL(url) {
-    try {
-        parsedURL = new URL(url);
-    } catch (error) {
-        return `Invalid URL: ${error}`
+async function crawlPage(baseURL, currentURL, pages){
+  // if this is an offsite URL, bail immediately
+  const currentUrlObj = new URL(currentURL)
+  const baseUrlObj = new URL(baseURL)
+  if (currentUrlObj.hostname !== baseUrlObj.hostname){
+    return pages
+  }
+
+  const normalizedURL = normalizeURL(currentURL)
+
+  // if we've already visited this page
+  // just increase the count and don't repeat
+  // the http request
+  if (pages[normalizedURL] > 0){
+    pages[normalizedURL]++
+    return pages
+  }
+
+  // initialize this page in the map
+  // since it doesn't exist yet
+  pages[normalizedURL] = 1
+
+  // fetch and parse the html of the currentURL
+  console.log(`crawling ${currentURL}`)
+  let htmlBody = ''
+  try {
+    const resp = await fetch(currentURL)
+    if (resp.status > 399){
+      console.log(`Got HTTP error, status code: ${resp.status}`)
+      return pages
     }
-
-    let newURL = parsedURL.host.replace("www.", "");
-
-    if (parsedURL.pathname.length > 1){
-        newURL += parsedURL.pathname;
+    const contentType = resp.headers.get('content-type')
+    if (!contentType.includes('text/html')){
+      console.log(`Got non-html response: ${contentType}`)
+      return pages
     }
+    htmlBody = await resp.text()
+  } catch (err){
+    console.log(err.message)
+  }
 
-    if(newURL.endsWith('/')){
-        newURL = newURL.slice(0,-1);
-    }
-    
+  const nextURLs = getURLsFromHTML(htmlBody, baseURL)
+  for (const nextURL of nextURLs){
+    pages = await crawlPage(baseURL, nextURL, pages)
+  }
 
-    return newURL
+  return pages
 }
 
-function getURLsFromHTML(htmlbody, baseURL){
-    const links = []
-
-    const dom = new JSDOM(htmlbody);
-    allLinks = dom.window.document.querySelectorAll('a');
-
-    for (const link of allLinks){
-        if (link.href.slice(0,1) === '/'){
-            try {
-                links.push(new URL (link.href, baseURL).href)
-            } catch (error) {
-                console.log(`${error.message}: ${link.href}`)
-            }
-        }
-        else{
-            try {
-                links.push(new URL (link.href).href)    
-            } catch (error) {
-                console.log(`${error.message}: ${link.href}`)
-            }            
-        }
+function getURLsFromHTML(htmlBody, baseURL){
+  const urls = []
+  const dom = new JSDOM(htmlBody)
+  const aElements = dom.window.document.querySelectorAll('a')
+  for (const aElement of aElements){
+    if (aElement.href.slice(0,1) === '/'){
+      try {
+        urls.push(new URL(aElement.href, baseURL).href)
+      } catch (err){
+        console.log(`${err.message}: ${aElement.href}`)
+      }
+    } else {
+      try {
+        urls.push(new URL(aElement.href).href)
+      } catch (err){
+        console.log(`${err.message}: ${aElement.href}`)
+      }
     }
-    return links;
+  }
+  return urls
 }
 
-async function crawlPage(currentLink){
-    console.log(`Spiders have reached ${currentLink}`)
-
-    try {
-        const response = await fetch(currentLink)
-        if (response.status > 399){
-            console.log(`Error above 400: ${response.status}`)
-            return
-        }
-        const contentType = response.headers.get('Content-Type')
-        if (!contentType.includes("text/html")) {
-            console.log(`Does this look like html to you? ${contentType}`)
-            return
-        }
-
-        const siteBody = await response.text()
-        console.log(siteBody)
-    } catch (error) {
-        console.log(error.message)
-    }
-
-    
+function normalizeURL(url){
+  const urlObj = new URL(url)
+  let fullPath = `${urlObj.host}${urlObj.pathname}`
+  if (fullPath.length > 0 && fullPath.slice(-1) === '/'){
+    fullPath = fullPath.slice(0, -1)
+  }
+  return fullPath
 }
 
 module.exports = {
-    normalizeURL,
-    getURLsFromHTML,
-    crawlPage,
+  crawlPage,
+  normalizeURL,
+  getURLsFromHTML
 }
+
