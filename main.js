@@ -1,4 +1,5 @@
-const { normalizeURL, getURLsFromHTML, crawlPage } = require('./crawl.js')
+const { crawlPage } = require('./crawl.js')
+const { printReport } = require('./report.js')
 const {argv} = require('node:process')
 
 function main(){
@@ -16,7 +17,7 @@ function main(){
 
     const baseUrl = argv[2];
     pages = crawlPage(baseUrl, baseUrl, {});
-    console.log(pages)
+    printReport(pages)
 
 }
 

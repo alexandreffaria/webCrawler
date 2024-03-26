@@ -1,0 +1,35 @@
+Waking up the spiders and directing them to https://wagslane.dev
+crawling https://wagslane.dev
+Creating the report.
+crawling https://wagslane.dev/tags/
+crawling https://wagslane.dev/about/
+crawling https://wagslane.dev/index.xml
+Got non-html response: application/xml
+crawling https://wagslane.dev/tags/business/
+crawling https://wagslane.dev/posts/dark-patterns/
+crawling https://wagslane.dev/posts/things-i-dont-want-to-do-to-grow-business/
+crawling https://wagslane.dev/tags/clean-code/
+crawling https://wagslane.dev/posts/zen-of-proverbs/
+crawling https://wagslane.dev/posts/func-y-json-api/
+crawling https://wagslane.dev/posts/keep-your-data-raw-at-rest/
+crawling https://wagslane.dev/posts/continuous-deployments-arent-continuous-disruptions/
+crawling https://wagslane.dev/posts/optimize-for-simplicit-first/
+crawling https://wagslane.dev/tags/devops/
+crawling https://wagslane.dev/posts/no-one-does-devops/
+crawling https://wagslane.dev/posts/leave-scrum-to-rugby
+crawling https://wagslane.dev/posts/managers-that-cant-code/
+crawling https://wagslane.dev/posts/kanban-vs-scrum/
+crawling https://wagslane.dev/tags/education/
+crawling https://wagslane.dev/posts/college-a-solution-in-search-of-a-problem/
+crawling https://wagslane.dev/tags/golang/
+crawling https://wagslane.dev/posts/guard-keyword-error-handling-golang/
+crawling https://wagslane.dev/posts/gos-major-version-handling/
+crawling https://wagslane.dev/posts/go-struct-ordering/
+crawling https://wagslane.dev/tags/management/
+crawling https://wagslane.dev/tags/philosophy/
+crawling https://wagslane.dev/posts/what-a-crazy-religion/
+crawling https://wagslane.dev/posts/a-case-against-a-case-for-the-book-of-mormon/
+crawling https://wagslane.dev/tags/writing/
+crawling https://wagslane.dev/posts/seo-is-a-scam-job/
+crawling https://wagslane.dev/posts/collapsing-quality-of-devto/
+crawling https://wagslane.dev/posts/developers-learn-to-say-no/
