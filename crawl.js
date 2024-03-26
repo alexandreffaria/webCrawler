@@ -71,12 +71,6 @@ async function crawlPage(currentLink){
     
 }
 
-    
-
-
-
-
-
 module.exports = {
     normalizeURL,
     getURLsFromHTML,
